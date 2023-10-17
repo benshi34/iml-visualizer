@@ -81,6 +81,7 @@ function CodeEditor({ def, defName, selectedQuestion }) {
           console.log("HERE")
           setDataFile(parsedJSON)
           setCurrFile(file.name)
+          setGenerationResult('')
         } catch (error) {
           // Handle JSON parsing error
           console.error('Error parsing JSON:', error);
