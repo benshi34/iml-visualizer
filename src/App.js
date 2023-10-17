@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import CodeEditor from './components/CodeEditor.js'
 import codingQuestions from './data/Questions.js'
 import sample from './data/sample.json'
+import sample2 from './data/sample2.json'
+import usaco_dict from './data/usaco_dict.json'
 
 function QuestionDropdown({ questions, selectedQuestion, onQuestionSelect }) {
   const problem_ids = Object.keys(questions)
@@ -22,6 +24,7 @@ function App() {
   const [selectedQuestion, setSelectedQuestion] = useState('');
   const [questions, setQuestions] = useState([]);
   const [descriptions, setDescriptions] = useState({});
+  const [currFile, setCurrFile] = useState('sample.json');
 
   const handleQuestionSelect = (question) => {
     setSelectedQuestion(question);
@@ -36,11 +39,15 @@ function App() {
     return questions
   }
 
-  useEffect(() => {
-    const questions = processJSON(sample)
-    setDescriptions(sample[2][0])
-    setQuestions(questions);
-  }, []);
+  const trim = (currFile) => {
+    const length = currFile.length
+    if (length < 20) {
+      return currFile
+    }
+    else {
+      return currFile.slice(0, 10) + "..." + currFile.slice(length-8, length)
+    }
+  }
 
   const handleJSONFileUpload = (event) => {
     const fileInput = event.target;
@@ -55,7 +62,7 @@ function App() {
           // Use the parsed JSON data in your code editor
           const newQuestions = processJSON(parsedJSON)
           setQuestions(newQuestions)
-          setDescriptions(parsedJSON[2][0])
+          setCurrFile(file.name)
         } catch (error) {
           // Handle JSON parsing error
           console.error('Error parsing JSON:', error);
@@ -67,28 +74,43 @@ function App() {
     }
   }; 
 
+  useEffect(() => {
+    const questions = processJSON(sample)
+    var descriptionTemp = {}
+    const ids = Object.keys(usaco_dict)
+    for (let i = 0; i < ids.length; i++) {
+      descriptionTemp[ids[i]] = usaco_dict[ids[i]]['description']
+    }
+    setDescriptions(descriptionTemp)
+    setQuestions(questions);
+  }, []);
+
   return (
     <div className="App">
       <h1>IML-Visualizer</h1>
+      <pre>
+        Question JSON loaded: <b>{trim(currFile)}</b>
+      </pre>
+      <div className="input-container">
+        <input
+          type="file"
+          id="jsonFileInput"
+          accept=".json"
+          onChange={handleJSONFileUpload}
+      />
+      </div>
+      <div></div>
       <QuestionDropdown questions={questions} selectedQuestion={selectedQuestion} onQuestionSelect={handleQuestionSelect} />
       <h2>Problem Description</h2>
       <pre>{selectedQuestion ? descriptions[selectedQuestion] : 'Select a question to view description.'}</pre>
       <div className="container">
         <div className="editor-container">
-          <CodeEditor questions={questions} selectedQuestion={selectedQuestion}/>
+          <CodeEditor def={sample} defName={'sample.json'} selectedQuestion={selectedQuestion}/>
         </div>
         <div className="editor-container">
-          <CodeEditor questions={questions} selectedQuestion={selectedQuestion}/>
+          <CodeEditor def={sample2} defName={'sample2.json'} selectedQuestion={selectedQuestion}/>
         </div>
       </div>
-      <button onClick={() => document.getElementById('jsonFileInput').click()}>Upload JSON File</button>
-      <input
-        type="file"
-        id="jsonFileInput"
-        accept=".json"
-        style={{ display: 'none' }}
-        onChange={handleJSONFileUpload}
-      />
     </div>
   );
 }

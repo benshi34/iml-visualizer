@@ -7,6 +7,12 @@
   gap: 20px;
 }
 
+h1 {
+  font-size: 30px; /* Increase font size for the header */
+  margin-bottom: 10px;
+  color: #007bff; /* Change text color */
+}
+
 /* Code editor container */
 .editor-container {
   flex: 1;
@@ -14,10 +20,15 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s;
   display: flex;
   flex-direction: column;
+}
+
+.input-container {
+  padding: 10px;
+  padding-bottom: 15px;
 }
 
 /* Code editor title */
@@ -30,6 +41,7 @@
 /* Code editor */
 .ace-editor {
   flex: 1;
+  justify-self: center;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
@@ -71,6 +83,14 @@
   padding: 5px 10px;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+select {
+  font-size: 14px; /* Adjust font size */
+  padding: 4px 4px; /* Increase padding for a larger dropdown */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
 }
 
 .reset-button:hover {
